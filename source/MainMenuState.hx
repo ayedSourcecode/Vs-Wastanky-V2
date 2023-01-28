@@ -25,6 +25,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
+	public static var WastankyVersions:String = 'V2';
 	public static var psychEngineVersion:String = '0.5.2h'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
@@ -35,10 +36,11 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		#if MODS_ALLOWED 'mods', #end
-		#if ACHIEVEMENTS_ALLOWED 'awards', #end
+		//#if MODS_ALLOWED 'mods', #end
+		//#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
-		#if !switch 'donate', #end
+		'Youtube',
+		//#if !switch 'donate', #end
 		'options'
 	];
 
@@ -46,6 +48,7 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
 	var debugKeys:Array<FlxKey>;
+	var char:FlxSprite;
 
 	override function create()
 	{
@@ -53,7 +56,7 @@ class MainMenuState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("Vs Wastanky playing", null);
 		#end
 		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 
@@ -115,7 +118,8 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
+			//menuItem.screenCenter(X);
+			menuItem.x = 120;
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
@@ -127,6 +131,10 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Vs Wastanky V" + WastankyVersion, 15);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -158,6 +166,53 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		super.create();
+		
+		switch(FlxG.random.int(1, 4))
+		{
+			case 1:
+				char = new FlxSprite(820, 0).loadGraphic(Paths.image('menuchar/WastankyOP'));//put your cords and image here
+				char.frames = Paths.getSparrowAtlas('menuchar/WastankyOP');//here put the name of the xml
+				char.animation.addByPrefix('idleO', 'WastankyOP idle', 15, true);//on 'idle normal' change it to your xml one
+				char.animation.play('idleO');//you can rename the anim however you want to
+				char.scrollFactor.set();
+				FlxG.sound.play(Paths.sound('appear'), 2);
+				char.flipX = true;//this is for flipping it to look left instead of right you can make it however you want
+				char.antialiasing = ClientPrefs.globalAntialiasing;
+				add(char);
+				
+			case 2:
+				char = new FlxSprite(820, 0).loadGraphic(Paths.image('menuchar/WastankyPY'));//put your cords and image here
+				char.frames = Paths.getSparrowAtlas('menuchar/WastankyPY');//here put the name of the xml
+				char.animation.addByPrefix('idleP', 'WastankyPY idle', 15, true);//on 'idle normal' change it to your xml one
+				char.animation.play('idleP');//you can rename the anim however you want to
+				char.scrollFactor.set();
+				FlxG.sound.play(Paths.sound('appear'), 2);
+				char.flipX = true;//this is for flipping it to look left instead of right you can make it however you want
+				char.antialiasing = ClientPrefs.globalAntialiasing;
+				add(char);
+				
+			case 3:
+				char = new FlxSprite(820, 0).loadGraphic(Paths.image('menuchar/WastankyHappy'));//put your cords and image here
+				char.frames = Paths.getSparrowAtlas('menuchar/WastankyHappy');//here put the name of the xml
+				char.animation.addByPrefix('idleH', 'WastankyHappy idle', 15, true);//on 'idle normal' change it to your xml one
+				char.animation.play('idleH');//you can rename the anim however you want to
+				char.scrollFactor.set();
+				FlxG.sound.play(Paths.sound('appear'), 2);
+				char.flipX = true;//this is for flipping it to look left instead of right you can make it however you want
+				char.antialiasing = ClientPrefs.globalAntialiasing;
+				add(char);
+				
+			case 4:
+				char = new FlxSprite(820, 0).loadGraphic(Paths.image('menuchar/Wastanky'));//put your cords and image here
+				char.frames = Paths.getSparrowAtlas('menuchar/Wastanky');//here put the name of the xml
+				char.animation.addByPrefix('idleW', 'Wastanky idle', 15, true);//on 'idle normal' change it to your xml one
+				char.animation.play('idleW');//you can rename the anim however you want to
+				char.scrollFactor.set();
+				FlxG.sound.play(Paths.sound('appear'), 2);
+				char.flipX = true;//this is for flipping it to look left instead of right you can make it however you want
+				char.antialiasing = ClientPrefs.globalAntialiasing;
+				add(char);
+		}		
 	}
 
 	#if ACHIEVEMENTS_ALLOWED
@@ -204,9 +259,9 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
+				if (optionShit[curSelected] == 'Youtube')
 				{
-					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
+					CoolUtil.browserLoad('https://www.youtube.com/channel/UCSpCqX732Yd99mWzuy3TEsw');
 				}
 				else
 				{
@@ -229,6 +284,7 @@ class MainMenuState extends MusicBeatState
 						}
 						else
 						{
+							FlxTween.tween(FlxG.camera, {zoom: 2.2}, 1.6,{ease:FlxEase.expoInOut});	
 							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 							{
 								var daChoice:String = optionShit[curSelected];
@@ -268,7 +324,7 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			//spr.screenCenter(X);
 		});
 	}
 
